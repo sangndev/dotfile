@@ -1,11 +1,7 @@
 -- [[ LSP starter ]]
-local lsp_dir = vim.fn.stdpath("config") .. "/lsp"
-local lsp_server = {}
-for name, type in vim.fs.dir(lsp_dir) do
-	if type == "file" and name:match("%.lua$") then
-		lsp_server[#lsp_server + 1] = name:gsub("%.lua$", "")
-	end
-end
+local lsp_utils = require("utils.lsp")
+local lsp_server = lsp_utils.get_lsp_servers()
+
 vim.lsp.enable(lsp_server)
 
 -- [[ LSP config ]]

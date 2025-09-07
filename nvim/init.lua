@@ -2,6 +2,7 @@ require("config.settings")
 require("config.mappings")
 require("config.lsp")
 require("config.helpers")
+require("config.autocmd")
 
 -- [[ Plugins ]]
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
