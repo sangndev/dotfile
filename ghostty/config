@@ -1,0 +1,20 @@
+font-family = JetBrainsMono Nerd Font Mono
+font-style = Regular
+font-style-bold = Bold
+font-style-italic = Italic
+font-style-bold-italic = Bold Italic
+font-size = 16.0
+
+theme = vscode.conf
+cursor-style = block
+background-opacity = 0.85
+
+shell-integration = zsh
+shell-integration-features = no-cursor,sudo,no-title
+background-blur = true
+
+window-padding-balance = true
+window-save-state = always
+macos-titlebar-style = transparent
+window-colorspace = "display-p3"
+copy-on-select = clipboard
