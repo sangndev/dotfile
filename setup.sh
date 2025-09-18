@@ -5,30 +5,43 @@ TMUX_PATH="$HOME/.tmux"
 TMUX_CONF_PATH="$HOME/.tmux.conf"
 BASHRC_PATH="$HOME/.bashrc"
 
+STATUS_CLEAN="[Cleaned]"
+STATUS_INITIALIZE="[Initialize]"
+STATUS_ACTIVATE="[Activate]"
+
 # [ Handlers ]
 
 # 1. help
 _help() {
   cat <<EOF
-\n
-These packages/tools here are required for this dotfile to work perfectly\n\n
-1. Neovim (https://github.com/neovim/neovim/blob/master/INSTALL.md)\n
-2. Tmux (https://github.com/tmux/tmux/wiki/Installing)\n
+
+These packages/tools here are required for this dotfile to work perfectly
+1. Neovim (https://github.com/neovim/neovim/blob/master/INSTALL.md)
+2. Tmux (https://github.com/tmux/tmux/wiki/Installing)
 3. NerdFont (https://github.com/ryanoasis/nerd-fonts/blob/master/readme.md#font-installation)
 EOF
 }
 
 # 2. install
 _install() {
+  # remove old config
   if [[ -f "$BASHRC_PATH"  ]]; then
     rm "$BASHRC_PATH"
+    echo "$STATUS_CLEAN .bashrc"
   fi
+
+  # symlink config
+  # bashrc
+  ln -s "./bashrc" "$BASHRC_PATH"
+  echo "$STATUS_INITIALIZE .bashrc"
+  source "$BASHRC_PATH"
+  echo "$STATUS_ACTIVATE .bashrc"
 }
 
 while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do 
   case $1 in
     -h | --help )
-      echo $(_help)
+      _help
       exit
       ;;
     -u | --update )
@@ -36,7 +49,7 @@ while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do
       exit
       ;;
     -i | --install )
-      echo $(_install)
+      _install
       exit
       ;;
     * )
