@@ -20,8 +20,8 @@ EOF
 
 # 2. install
 _install() {
-  if [[ -d  ]]; then
-    echo "something"
+  if [[ -f "$BASHRC_PATH"  ]]; then
+    rm "$BASHRC_PATH"
   fi
 }
 
