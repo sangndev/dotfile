@@ -22,6 +22,14 @@ These packages/tools here are required for this dotfile to work perfectly
 EOF
 }
 
+_help_init() {
+  cat <<EOF
+Run:
+  source $BASHRC_PATH
+to apply new shell setting
+EOF
+}
+
 # 2. install
 _install() {
   # remove old config
@@ -30,12 +38,23 @@ _install() {
     echo "$STATUS_CLEAN .bashrc"
   fi
 
+  if [[ -f "$TMUX_PATH"]]; then
+    rm "$TMUX_PATH"
+    echo "$STATUS_CLEAN .tmux.conf"
+  fi
+  
+
   # symlink config
+
   # bashrc
   ln -s "$(pwd)/bashrc" "$BASHRC_PATH"
   echo "$STATUS_INITIALIZE .bashrc"
-  source "$BASHRC_PATH"
-  echo "$STATUS_ACTIVATE .bashrc"
+  # tmux.conf
+  ln -s "$(pwd)/tmux.conf" "$TMUX_PATH"
+  echo "$STATUS_INITIALIZE .tmux.conf"
+
+  # finish
+  _help_init
 }
 
 while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do 
@@ -66,7 +85,7 @@ fi
 if [[ $# -eq 0 ]]; then
   echo "Usage: $0 [options]"
   echo "  -h, --help     get a help for installing required packages/tools"
-  echo "  -i, --init     install needed packages and link config files/folder "
+  echo "  -i, --install     install needed packages and link config files/folder "
   echo "  -u, --update   update config files/folder"
   exit 1
 fi
