@@ -32,7 +32,7 @@ _install() {
 
   # symlink config
   # bashrc
-  ln -s "./bashrc" "$BASHRC_PATH"
+  ln -s "$(pwd)/bashrc" "$BASHRC_PATH"
   echo "$STATUS_INITIALIZE .bashrc"
   source "$BASHRC_PATH"
   echo "$STATUS_ACTIVATE .bashrc"
