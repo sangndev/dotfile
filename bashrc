@@ -12,12 +12,14 @@ PROMPT_COMMAND='
   if [ "$PWD" = "$HOME" ]; then
     SHORT_DIR="~"
   else
-    IFS="/" read -ra DIR_PARTS <<< "${PWD#$HOME/}"  # Remove home prefix
+    REL_PATH=${PWD#$HOME/}        # strip $HOME/
+    DIR_PARTS=(${REL_PATH//// })  # split by /
     DIR_COUNT=${#DIR_PARTS[@]}
+
     if (( DIR_COUNT > 3 )); then
       SHORT_DIR=".../${DIR_PARTS[DIR_COUNT-3]}/${DIR_PARTS[DIR_COUNT-2]}/${DIR_PARTS[DIR_COUNT-1]}"
     else
-      SHORT_DIR="${PWD/#$HOME/~}"  # Replace full home path with ~
+      SHORT_DIR="~/$REL_PATH"
     fi
   fi
 
