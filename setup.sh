@@ -21,6 +21,7 @@ These packages/tools here are required for this dotfile to work perfectly
 1. Neovim 0.11 or above (https://github.com/neovim/neovim/blob/master/INSTALL.md)
 2. Tmux (https://github.com/tmux/tmux/wiki/Installing)
 3. NerdFont (https://github.com/ryanoasis/nerd-fonts/blob/master/readme.md#font-installation)
+4. Fzf (https://github.com/junegunn/fzf?tab=readme-ov-file#installation)
 
 Optional:
 1. Nvm (https://github.com/nvm-sh/nvm?tab=readme-ov-file#installing-and-updating)
