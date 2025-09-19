@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+CONFIG_PATH="$HOME/.config"
 NVIM_PATH="$HOME/.config/nvim"
 NVIM_CACHED_PATH="$HOME/.local/share/nvim"
 TMUX_PATH="$HOME/.tmux"
@@ -8,6 +9,7 @@ BASHRC_PATH="$HOME/.bashrc"
 STATUS_CLEAN="[Cleaned]"
 STATUS_INITIALIZE="[Initialize]"
 STATUS_ACTIVATE="[Activate]"
+STATUS_CREATE="[Create]"
 
 # [ Handlers ]
 
@@ -38,27 +40,32 @@ _install() {
   # remove old config
   if [[ -f "$BASHRC_PATH" ]]; then
     rm "$BASHRC_PATH"
-    echo "$STATUS_CLEAN .bashrc"
+    echo "$STATUS_CLEAN $BASHRC_PATH"
   fi
 
   if [[ -f "$TMUX_PATH" ]]; then
     rm "$TMUX_PATH"
-    echo "$STATUS_CLEAN .tmux"
+    echo "$STATUS_CLEAN $TMUX_PATH"
   fi
   
   if [[ -f "$TMUX_CONF_PATH" ]]; then
     rm "$TMUX_CONF_PATH"
-    echo "$STATUS_CLEAN .tmux.conf"
+    echo "$STATUS_CLEAN $TMUX_CONF_PATH"
   fi
 
   if [[ -d "$NVIM_PATH"]]; then
     rm -rf "$NVIM_PATH"
-    echo "$STATUS_CLEAN .config/nvim"
+    echo "$STATUS_CLEAN $NVIM_PATH"
   fi
 
   if [[ -d "$NVIM_CACHED_PATH"]]; then
     rm -rf "$NVIM_CACHED_PATH"
-    echo "$STATUS_CLEAN .local/shared/nvim"
+    echo "$STATUS_CLEAN $NVIM_CACHED_PATH"
+  fi
+
+  if [[ ! -d "$CONFIG_PATH" ]]; then
+    mkdir "$CONFIG_PATH"
+    echo "$STATUS_CREATE $CONFIG_PATH"
   fi
 
 
@@ -83,10 +90,6 @@ while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do
       _help
       exit
       ;;
-    --update )
-      echo "update"
-      exit
-      ;;
     --install )
       _install
       exit
@@ -106,6 +109,5 @@ if [[ $# -eq 0 ]]; then
   echo "Usage: $0 [options]"
   echo "  --help              get a help for installing required packages/tools"
   echo "  --install           install needed packages and link config files/folder "
-  echo "  --update            update config files/folder"
   exit 1
 fi
