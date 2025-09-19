@@ -1,3 +1,5 @@
+-- Lsp reset
+
 vim.api.nvim_create_user_command("LspReset", function(opts)
 	local target = opts.args
 
@@ -34,5 +36,26 @@ end, {
 		return vim.tbl_map(function(c)
 			return c.name
 		end, vim.lsp.get_clients())
+	end,
+})
+
+-- Highlight yank
+vim.api.nvim_create_autocmd("TextYankPost", {
+	desc = "Highlight when yanking (copying) text",
+	group = vim.api.nvim_create_augroup("highlight-yank", { clear = true }),
+	callback = function()
+		vim.highlight.on_yank()
+	end,
+})
+
+-- Terminal
+vim.api.nvim_create_autocmd("TermOpen", {
+	group = vim.api.nvim_create_augroup("custom-term-open", { clear = true }),
+	pattern = "*",
+	callback = function(args)
+		vim.api.nvim_buf_call(args.buf, function()
+			vim.cmd("startinsert")
+			vim.cmd("setlocal nonumber norelativenumber")
+		end)
 	end,
 })

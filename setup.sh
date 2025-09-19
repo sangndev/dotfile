@@ -16,13 +16,13 @@ _help() {
   cat <<EOF
 
 These packages/tools here are required for this dotfile to work perfectly
-1. Neovim (https://github.com/neovim/neovim/blob/master/INSTALL.md)
+1. Neovim 0.11 or above (https://github.com/neovim/neovim/blob/master/INSTALL.md)
 2. Tmux (https://github.com/tmux/tmux/wiki/Installing)
 3. NerdFont (https://github.com/ryanoasis/nerd-fonts/blob/master/readme.md#font-installation)
-4. Lazygit (https://github.com/jesseduffield/lazygit?tab=readme-ov-file#installation)
 
 Optional:
 1. Nvm (https://github.com/nvm-sh/nvm?tab=readme-ov-file#installing-and-updating)
+2. Lazygit (https://github.com/jesseduffield/lazygit?tab=readme-ov-file#installation)
 EOF
 }
 
@@ -34,19 +34,33 @@ to apply new shell setting
 EOF
 }
 
-# 2. install
 _install() {
   # remove old config
-  if [[ -f "$BASHRC_PATH"  ]]; then
+  if [[ -f "$BASHRC_PATH" ]]; then
     rm "$BASHRC_PATH"
     echo "$STATUS_CLEAN .bashrc"
   fi
 
-  if [[ -f "$TMUX_PATH"]]; then
+  if [[ -f "$TMUX_PATH" ]]; then
     rm "$TMUX_PATH"
-    echo "$STATUS_CLEAN .tmux.conf"
+    echo "$STATUS_CLEAN .tmux"
   fi
   
+  if [[ -f "$TMUX_CONF_PATH" ]]; then
+    rm "$TMUX_CONF_PATH"
+    echo "$STATUS_CLEAN .tmux.conf"
+  fi
+
+  if [[ -d "$NVIM_PATH"]]; then
+    rm -rf "$NVIM_PATH"
+    echo "$STATUS_CLEAN .config/nvim"
+  fi
+
+  if [[ -d "$NVIM_CACHED_PATH"]]; then
+    rm -rf "$NVIM_CACHED_PATH"
+    echo "$STATUS_CLEAN .local/shared/nvim"
+  fi
+
 
   # symlink config
 
@@ -54,8 +68,10 @@ _install() {
   ln -s "$(pwd)/bashrc" "$BASHRC_PATH"
   echo "$STATUS_INITIALIZE .bashrc"
   # tmux.conf
-  ln -s "$(pwd)/tmux.conf" "$TMUX_PATH"
+  ln -s "$(pwd)/tmux.conf" "$TMUX_CONF_PATH"
   echo "$STATUS_INITIALIZE .tmux.conf"
+  # nvim
+  ln -s "$(pwd)/nvim" "$NVIM_PATH"
 
   # finish
   _help_init
@@ -63,15 +79,15 @@ _install() {
 
 while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do 
   case $1 in
-    -h | --help )
+    --help )
       _help
       exit
       ;;
-    -u | --update )
+    --update )
       echo "update"
       exit
       ;;
-    -i | --install )
+    --install )
       _install
       exit
       ;;
@@ -88,8 +104,8 @@ if [[ "$1" == '--' ]]; then
 fi
 if [[ $# -eq 0 ]]; then
   echo "Usage: $0 [options]"
-  echo "  -h, --help     get a help for installing required packages/tools"
-  echo "  -i, --install     install needed packages and link config files/folder "
-  echo "  -u, --update   update config files/folder"
+  echo "  --help              get a help for installing required packages/tools"
+  echo "  --install           install needed packages and link config files/folder "
+  echo "  --update            update config files/folder"
   exit 1
 fi
