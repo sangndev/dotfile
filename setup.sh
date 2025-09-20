@@ -54,12 +54,12 @@ _install() {
     echo "$STATUS_CLEAN $TMUX_CONF_PATH"
   fi
 
-  if [[ -d "$NVIM_PATH"]]; then
+  if [[ -d "$NVIM_PATH" ]]; then
     rm -rf "$NVIM_PATH"
     echo "$STATUS_CLEAN $NVIM_PATH"
   fi
 
-  if [[ -d "$NVIM_CACHED_PATH"]]; then
+  if [[ -d "$NVIM_CACHED_PATH" ]]; then
     rm -rf "$NVIM_CACHED_PATH"
     echo "$STATUS_CLEAN $NVIM_CACHED_PATH"
   fi
