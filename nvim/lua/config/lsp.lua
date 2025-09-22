@@ -38,5 +38,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		map("gld", vim.diagnostic.setloclist, "[L]ist [D]iagnostics")
 		map("]d", vim.diagnostic.goto_next, "Goto next [D]iagnostics")
 		map("[d", vim.diagnostic.goto_prev, "Goto prev [D]iagnostics")
+    map("<leader>d", vim.diagnostic.open_float, "Open diagnostic in float window")
 	end,
 })
