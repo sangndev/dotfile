@@ -75,6 +75,8 @@ Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 " Comment
 Plug 'tpope/vim-commentary'
+" Lsp "
+Plug 'neoclide/coc.nvim', { 'branch': 'release'}
 call plug#end()
 
 " [[ Configure plugins ]]
@@ -88,3 +90,5 @@ colorscheme tokyonight
 nnoremap <leader>pf :Files<cr>
 nnoremap <leader>pb :Buffers<cr>
 nnoremap <leader>gg :Rg 
+
+" LSP config
