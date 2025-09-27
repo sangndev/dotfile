@@ -54,3 +54,37 @@ vnoremap <silent> K :m '<-2<cr>gv=gv
 vnoremap <silent> J :m '>+1<cr>gv=gv
 inoremap jk <esc>
 tnoremap <esc><esc> <C-\><C-N>
+
+" [[ Plugins ]]
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+	silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin()
+" Detect tabstop and shiftwidth automatically
+Plug 'tpope/vim-sleuth'
+" Colorscheme
+Plug 'ghifarit53/tokyonight-vim'
+" Fuzzy Search
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+" Git
+Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
+" Comment
+Plug 'tpope/vim-commentary'
+call plug#end()
+
+" [[ Configure plugins ]]
+
+" Colorscheme
+let g:tokyonight_style = 'night'
+let g:tokyonight_enable_italic = 0
+colorscheme tokyonight
+
+" fzf-vim
+nnoremap <leader>pf :Files<cr>
+nnoremap <leader>pb :Buffers<cr>
+nnoremap <leader>gg :Rg 
