@@ -78,7 +78,9 @@ Plug 'tpope/vim-commentary'
 " Lsp "
 Plug 'neoclide/coc.nvim', { 'branch': 'release'}
 " Auto pair
-Plugin 'jiangmiao/auto-pairs'
+Plug 'LunarWatcher/auto-pairs'
+" Synrax highlighting
+Plug 'sheerun/vim-polyglot'
 call plug#end()
 
 " [[ Configure plugins ]]
