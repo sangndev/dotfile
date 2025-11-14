@@ -54,7 +54,7 @@ return {
 
 			vim.keymap.set("n", "<leader>pf", builtin.find_files, { desc = "Global find file" })
 			vim.keymap.set("n", "<leader>pb", builtin.buffers, { desc = "Opened buffer" })
-			vim.keymap.set("n", "<leader>gg", function()
+			vim.keymap.set("n", "<leader>ps", function()
 				builtin.grep_string(ivy_opts({
 					search = vim.fn.input("Grep > "),
 				}))
