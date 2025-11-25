@@ -7,10 +7,10 @@ return {
       conform.setup({
         formatters_by_ft = {
           lua = { "stylua" },
-          javascript = { "prettierd", "prettier", stop_after_first = true },
-          typescript = { "prettierd", "prettier", stop_after_first = true },
-          javascriptreact = { "prettierd", "prettier", stop_after_first = true },
-          typescriptreact = { "prettierd", "prettier", stop_after_first = true },
+          javascript = { "prettier","prettierd",  stop_after_first = true },
+          typescript = { "prettier","prettierd",  stop_after_first = true },
+          javascriptreact = { "prettier","prettierd",  stop_after_first = true },
+          typescriptreact = { "prettier","prettierd",  stop_after_first = true },
           json = { "prettierd", "prettier", stop_after_first = true },
           css = { "prettierd", "prettier", stop_after_first = true },
           svelte = { "prettierd", "prettier", stop_after_first = true },
