@@ -41,3 +41,4 @@ alias lsa='ls -A'
 alias l='ls -l'
 alias ll='ls -la'
 alias lynx='lynx -display_charset=UTF-8 -vikeys'
+export GOOSE_DISABLE_KEYRING=1
