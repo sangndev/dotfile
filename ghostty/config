@@ -5,7 +5,7 @@ font-style-italic = Italic
 font-style-bold-italic = Bold Italic
 font-size = 16.0
 
-theme = vscode.conf
+theme = vscode-light.conf
 cursor-style = block
 background-opacity = 0.85
 
