@@ -93,7 +93,7 @@ colorscheme tokyonight
 " fzf-vim
 nnoremap <leader>pf :Files<cr>
 nnoremap <leader>pb :Buffers<cr>
-nnoremap <leader>gg :Rg 
+nnoremap <leader>ps :Rg 
 
 " LSP config
 inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
