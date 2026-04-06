@@ -14,47 +14,13 @@ FORCE=0
 DRY_RUN=0
 WITH_CACHE=0
 ONLY_COMPONENTS=""
-
-COLOR=0
-if [ -t 1 ] && command -v tput >/dev/null 2>&1; then
-  if [ "$(tput colors 2>/dev/null || echo 0)" -ge 8 ]; then
-    COLOR=1
-  fi
-fi
-
-if [ "$COLOR" -eq 1 ]; then
-  C_RESET="$(tput sgr0)"
-  C_BOLD="$(tput bold)"
-  C_DIM="$(tput dim)"
-  C_RED="$(tput setaf 1)"
-  C_GREEN="$(tput setaf 2)"
-  C_YELLOW="$(tput setaf 3)"
-  C_BLUE="$(tput setaf 4)"
-else
-  C_RESET=""
-  C_BOLD=""
-  C_DIM=""
-  C_RED=""
-  C_GREEN=""
-  C_YELLOW=""
-  C_BLUE=""
-fi
+ALL=0
 
 log() { printf '%s\n' "$*"; }
-ui() { printf '%s\n' "$*" >&2; }
-info() { printf '%s\n' "${C_BLUE}info:${C_RESET} $*"; }
-ok() { printf '%s\n' "${C_GREEN}ok:${C_RESET} $*"; }
-warn() { printf '%s\n' "${C_YELLOW}warn:${C_RESET} $*" >&2; }
-die() { printf '%s\n' "${C_RED}error:${C_RESET} $*" >&2; exit 1; }
-
-is_tty() { [ -t 0 ] && [ -t 1 ]; }
-
-banner() {
-  log "${C_BOLD}Dotfiles setup${C_RESET} ${C_DIM}($REPO_ROOT)${C_RESET}"
-  if [ "$DRY_RUN" -eq 1 ]; then
-    info "dry-run enabled (no changes will be made)"
-  fi
-}
+info() { printf '%s\n' "info: $*"; }
+ok() { printf '%s\n' "ok: $*"; }
+warn() { printf '%s\n' "warn: $*" >&2; }
+die() { printf '%s\n' "error: $*" >&2; exit 1; }
 
 prompt_confirm() {
   prompt="$1"
@@ -78,12 +44,13 @@ Usage:
 
 Actions:
   help      Show commands and prerequisites
-  install   Link selected configs into $HOME (default: all)
-  clean     Remove previously linked configs (default: all)
+  install   Link selected configs into $HOME (requires --only/--all)
+  clean     Remove previously linked configs (requires --only/--all)
   upgrade   Pull latest changes from git remote
 
 Options:
-  --only <csv>     Components (e.g. "nvim,tmux"); default: all
+  --only <csv>     Components (e.g. "nvim,tmux")
+  --all            Select all components (install/clean)
   -y, --yes        Assume "yes" for prompts
   --force          Also touch non-managed targets (dangerous)
   --dry-run        Print actions without changing anything
@@ -93,9 +60,11 @@ Components:
   bashrc, tmux, nvim, vim, ghostty, termux
 
 Examples:
-  ./setup.sh install
+  ./setup.sh
   ./setup.sh install --only nvim,tmux
+  ./setup.sh install --all
   ./setup.sh clean --only nvim --with-cache
+  ./setup.sh clean --all
   ./setup.sh upgrade
 EOF
 }
@@ -282,75 +251,23 @@ clean_component() {
   fi
 }
 
-choose_action_interactive() {
-  ui ""
-  ui "${C_BOLD}What do you want to do?${C_RESET}"
-  ui "  1) install"
-  ui "  2) clean"
-  ui "  3) upgrade"
-  ui "  4) help"
-  ui "  5) quit"
-  printf '%s' "Action [1-5]: " >&2
-  read choice || choice=""
-  case "$choice" in
-    1|install) printf '%s' "install" ;;
-    2|clean) printf '%s' "clean" ;;
-    3|upgrade) printf '%s' "upgrade" ;;
-    4|help) printf '%s' "help" ;;
-    5|quit|"") printf '%s' "" ;;
-    *) die "Invalid action: $choice" ;;
-  esac
-}
-
-choose_components_interactive() {
-  ui ""
-  ui "${C_BOLD}Which components?${C_RESET} (press Enter for all)"
-  ui "  1) bashrc"
-  ui "  2) tmux"
-  ui "  3) nvim"
-  ui "  4) vim"
-  ui "  5) ghostty"
-  ui "  6) termux"
-  ui "  a) all"
-  printf '%s' "Selection (e.g. 1 3 4): " >&2
-  read input || input=""
-  input="$(printf '%s' "$input" | tr '[:upper:]' '[:lower:]')"
-
-  if [ -z "$input" ] || [ "$input" = "a" ] || [ "$input" = "all" ]; then
+select_components() {
+  if [ "$ALL" -eq 1 ]; then
     printf '%s' "$DEFAULT_COMPONENTS"
     return 0
   fi
-
-  selected=""
-  for token in $input; do
-    case "$token" in
-      1|bashrc) selected="$selected bashrc" ;;
-      2|tmux) selected="$selected tmux" ;;
-      3|nvim) selected="$selected nvim" ;;
-      4|vim) selected="$selected vim" ;;
-      5|ghostty) selected="$selected ghostty" ;;
-      6|termux) selected="$selected termux" ;;
-      *) die "Invalid component selection: $token" ;;
-    esac
-  done
-
-  printf '%s' "$(printf '%s' "$selected" | sed 's/^ *//')"
-}
-
-select_components() {
   if [ -n "$ONLY_COMPONENTS" ]; then
     printf '%s' "$ONLY_COMPONENTS"
-  elif is_tty; then
-    choose_components_interactive
-  else
-    printf '%s' "$DEFAULT_COMPONENTS"
+    return 0
   fi
+  printf '%s' ""
 }
 
 run_install() {
   components="$(select_components)"
   if [ -z "$components" ]; then
-    die "No components selected"
+    usage
+    die "install requires --only <csv> or --all"
   fi
   for component in $components; do
     link_component "$component"
@@ -363,7 +280,8 @@ run_install() {
 run_clean() {
   components="$(select_components)"
   if [ -z "$components" ]; then
-    die "No components selected"
+    usage
+    die "clean requires --only <csv> or --all"
   fi
   for component in $components; do
     clean_component "$component"
@@ -402,11 +320,10 @@ main() {
     shift
   fi
 
-  if [ -z "$action" ] && is_tty; then
-    action="$(choose_action_interactive)"
-    if [ -z "$action" ]; then
-      exit 0
-    fi
+  # Default behavior: show help (even when run as `sh setup.sh` or `./setup.sh`,
+  # including when stdin is piped).
+  if [ -z "$action" ]; then
+    action="help"
   fi
 
   while [ "${#:-0}" -gt 0 ]; do
@@ -415,6 +332,7 @@ main() {
       --force) FORCE=1 ;;
       --dry-run) DRY_RUN=1 ;;
       --with-cache) WITH_CACHE=1 ;;
+      --all) ALL=1 ;;
       --only)
         shift || die "--only requires a value"
         ONLY_COMPONENTS="$(normalize_csv "${1:-}" | tr ',' ' ')"
@@ -431,30 +349,23 @@ main() {
 
   case "${action:-}" in
     help)
-      banner
       usage
       log ""
       prereqs
       ;;
     install)
-      banner
+      if [ "$DRY_RUN" -eq 1 ]; then info "dry-run enabled (no changes will be made)"; fi
       run_install
       ;;
     clean)
-      banner
+      if [ "$DRY_RUN" -eq 1 ]; then info "dry-run enabled (no changes will be made)"; fi
       run_clean
       ;;
     upgrade)
-      banner
+      if [ "$DRY_RUN" -eq 1 ]; then info "dry-run enabled (no changes will be made)"; fi
       run_upgrade
       ;;
-    "")
-      banner
-      usage
-      die "Missing action (try: ./setup.sh help)"
-      ;;
     *)
-      banner
       usage
       die "Unknown action: $action"
       ;;
