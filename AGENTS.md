@@ -16,9 +16,10 @@ This repository is a personal dotfiles collection. Key paths:
 
 There is no “build” step. Primary workflow is install + smoke-check:
 
+- `./setup.sh` / `sh setup.sh`: prints help (default action).
 - `./setup.sh help`: shows available actions and prerequisites.
-- `./setup.sh install`: links configs into `$HOME` (defaults to all). Interactive component picker in a TTY; use `--only nvim,tmux` for non-interactive use. Prompts before overwriting; existing targets are backed up under `~/.dotfile-backup/<timestamp>/`.
-- `./setup.sh clean`: removes previously linked targets (defaults to all). By default it only removes symlinks pointing back into this repo (use `--force` to remove non-managed targets).
+- `./setup.sh install`: links configs into `$HOME` (requires `--only ...` or `--all`). Prompts before overwriting; existing targets are backed up under `~/.dotfile-backup/<timestamp>/`.
+- `./setup.sh clean`: removes previously linked targets (requires `--only ...` or `--all`). By default it only removes symlinks pointing back into this repo (use `--force` to remove non-managed targets).
 - `./setup.sh upgrade`: pulls the latest dotfiles via `git pull --rebase`.
 - `sh -n setup.sh`: basic shell syntax check (script is POSIX `sh` compatible; `sh setup.sh ...` also works).
 - `nvim` / `tmux`: manual smoke tests after changing editor/terminal configs.
