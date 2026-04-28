@@ -36,6 +36,7 @@ set colorcolumn="80"
 set confirm
 set nolist
 set hlsearch
+set nowrap
 
 " [[ Keymappings ]]
 nnoremap <silent> <leader>e :Ex<cr>
@@ -54,6 +55,8 @@ vnoremap <silent> K :m '<-2<cr>gv=gv
 vnoremap <silent> J :m '>+1<cr>gv=gv
 inoremap jk <esc>
 tnoremap <esc><esc> <C-\><C-N>
+nnoremap <silent> sv <C-w>v<C-w>p
+nnoremap <silent> ss <C-w>s<C-w>p
 
 " [[ Plugins ]]
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'

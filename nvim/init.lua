@@ -1,6 +1,6 @@
 require("config.settings")
 require("config.mappings")
-require("config.lsp")
+-- require("config.lsp")
 require("config.autocmd")
 
 -- [[ Plugins ]]
