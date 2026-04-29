@@ -101,11 +101,8 @@ nnoremap <leader>ps :Rg
 " LSP config
 inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-if has('nvim')
-  inoremap <silent><expr> <c-space> coc#refresh()
-else
-  inoremap <silent><expr> <c-@> coc#refresh()
-endif
+inoremap <silent><expr> <c-o> coc#refresh()
+
 " Use `[g` and `]g` to navigate diagnostics
 nmap <silent><nowait> [d <Plug>(coc-diagnostic-prev)
 nmap <silent><nowait> ]d <Plug>(coc-diagnostic-next)
@@ -129,7 +126,7 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 nmap grn <Plug>(coc-rename)
 " Formatting selected code
 xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
+nnoremap <silent> <leader>f  :Format<CR>
 augroup mygroup
   autocmd!
   " Setup formatexpr specified filetype(s)
@@ -139,3 +136,5 @@ augroup end
 " Example: `<leader>aap` for current paragraph
 xmap <leader>a  <Plug>(coc-codeaction-selected)
 nmap <leader>a  <Plug>(coc-codeaction-selected)
+" Add `:Format` command to format current buffer
+command! -nargs=0 Format :call CocActionAsync('format')
