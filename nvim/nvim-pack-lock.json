@@ -10,10 +10,6 @@
       "src": "https://github.com/saghen/blink.cmp",
       "version": "1.0.0 - 2.0.0"
     },
-    "compl.nvim": {
-      "rev": "df9cb61bea1e3f104c7b5aeeaa95415b10760d50",
-      "src": "https://github.com/brianaung/compl.nvim"
-    },
     "conform.nvim": {
       "rev": "18aeab3d63d350dcf44d64c462cc489a3412af40",
       "src": "https://github.com/stevearc/conform.nvim"
