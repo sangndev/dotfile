@@ -146,6 +146,9 @@ do
 		},
 	})
 
+	-- [[ Vim Fugitive ]]
+	vim.pack.add({ gh("tpope/vim-fugitive") })
+
 	-- [[ Oil ]]
 	vim.pack.add({ gh("stevearc/oil.nvim") })
 	require("oil").setup({
