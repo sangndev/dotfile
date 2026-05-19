@@ -30,10 +30,6 @@
       "rev": "84a4987ff36798c2fc1169cbaff67960aed9776f",
       "src": "https://github.com/NMAC427/guess-indent.nvim"
     },
-    "koda.nvim": {
-      "rev": "ff7ea32c2002ee18032629122f8232fc97e5ccb3",
-      "src": "https://github.com/oskarnurm/koda.nvim"
-    },
     "mason-lspconfig.nvim": {
       "rev": "7b01e2974a47d489bb92f47a41e4c0088ea8f86e",
       "src": "https://github.com/mason-org/mason-lspconfig.nvim"
@@ -62,6 +58,10 @@
     "oil.nvim": {
       "rev": "0fcc83805ad11cf714a949c98c605ed717e0b83e",
       "src": "https://github.com/stevearc/oil.nvim"
+    },
+    "onenord.nvim": {
+      "rev": "8b6fe1e0f260ca0b8201ef6a8e2c97e0f38ea35d",
+      "src": "https://github.com/rmehri01/onenord.nvim"
     },
     "plenary.nvim": {
       "rev": "74b06c6c75e4eeb3108ec01852001636d85a932b",

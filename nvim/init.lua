@@ -172,12 +172,18 @@ end
 -- Colorscheme
 do
 	vim.pack.add({
-		gh("oskarnurm/koda.nvim"),
+		gh("rmehri01/onenord.nvim"),
 	})
 
-	require("koda").setup({ transparent = true })
+	require("onenord").setup({
+		theme = "light",
+		disable = {
+			background = true,
+			float_background = true,
+		},
+	})
 
-	vim.cmd("colorscheme koda-light")
+	vim.cmd("colorscheme onenord")
 end
 
 -- Treesitter
