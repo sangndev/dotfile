@@ -42,6 +42,7 @@ do
 	vim.o.signcolumn = "yes"
 	vim.o.winborder = "rounded"
 	vim.o.wrap = false
+	vim.o.cmdheight = 0
 
 	vim.keymap.set("n", "<leader>h", "<cmd>noh<cr>", { desc = "Set no hilighting", silent = true })
 	vim.keymap.set("i", "jk", "<esc>", { desc = "Set to normal mode", silent = true })
@@ -167,6 +168,13 @@ do
 	-- [[ Autopairs ]]
 	vim.pack.add({ gh("windwp/nvim-autopairs") })
 	require("nvim-autopairs").setup({})
+
+	-- [[ UI2 ]]
+	require("vim._core.ui2").enable({})
+
+	-- [[ Tiny cmdline ]]
+	vim.pack.add({ gh("rachartier/tiny-cmdline.nvim") })
+	require("tiny-cmdline").setup()
 end
 
 -- Colorscheme
