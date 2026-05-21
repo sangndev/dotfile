@@ -43,7 +43,9 @@ do
 	vim.o.winborder = "rounded"
 	vim.o.wrap = false
 	vim.o.cmdheight = 0
+	vim.o.laststatus = 3
 
+	vim.keymap.set("x", "p", [["_dP]], { desc = "Paste over selection without losing yanked text" })
 	vim.keymap.set("n", "<leader>h", "<cmd>noh<cr>", { desc = "Set no hilighting", silent = true })
 	vim.keymap.set("i", "jk", "<esc>", { desc = "Set to normal mode", silent = true })
 	vim.keymap.set("v", "K", ":m '<-2<cr>gv=gv", { desc = "Moving block to top", silent = true })
@@ -175,6 +177,12 @@ do
 	-- [[ Tiny cmdline ]]
 	vim.pack.add({ gh("rachartier/tiny-cmdline.nvim") })
 	require("tiny-cmdline").setup()
+
+	-- [[ Comment ]]
+	vim.pack.add({ gh("numToStr/Comment.nvim"), gh("JoosepAlviste/nvim-ts-context-commentstring") })
+	require("Comment").setup({
+		pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
+	})
 end
 
 -- Colorscheme
