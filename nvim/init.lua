@@ -191,11 +191,16 @@ do
 		gh("rmehri01/onenord.nvim"),
 	})
 
+	local colors = require("onenord.colors").load()
 	require("onenord").setup({
 		theme = "light",
 		disable = {
 			background = true,
 			float_background = true,
+		},
+		custom_highlights = {
+			Visual = { bg = colors.cyan, fg = colors.bg },
+			StatusLine = { bg = "NONE" },
 		},
 	})
 
