@@ -172,7 +172,20 @@ do
 	require("nvim-autopairs").setup({})
 
 	-- [[ UI2 ]]
-	require("vim._core.ui2").enable({})
+	require("vim._core.ui2").enable({
+		enable = true,
+		msg = {
+			target = "msg",
+			timeout = 2000,
+			targets = {
+				[""] = "msg",
+				echo = "msg",
+				echomsg = "msg",
+				lua_print = "msg",
+			},
+			border = "rounded",
+		},
+	})
 
 	-- [[ Tiny cmdline ]]
 	vim.pack.add({ gh("rachartier/tiny-cmdline.nvim") })
@@ -346,6 +359,7 @@ do
 	vim.pack.add({ gh("j-hui/fidget.nvim") })
 	require("fidget").setup({
 		notification = {
+			override_vim_notify = false,
 			window = {
 				winblend = 0, -- Background color opacity in the notification window
 				border = "rounded", -- Border around the notification window
