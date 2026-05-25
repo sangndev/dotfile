@@ -182,6 +182,7 @@ do
 				echo = "msg",
 				echomsg = "msg",
 				lua_print = "msg",
+				cmd = "cmd",
 			},
 			border = "rounded",
 		},
@@ -189,7 +190,9 @@ do
 
 	-- [[ Tiny cmdline ]]
 	vim.pack.add({ gh("rachartier/tiny-cmdline.nvim") })
-	require("tiny-cmdline").setup()
+	require("tiny-cmdline").setup({
+		native_types = {},
+	})
 
 	-- [[ Comment ]]
 	vim.pack.add({ gh("numToStr/Comment.nvim"), gh("JoosepAlviste/nvim-ts-context-commentstring") })
