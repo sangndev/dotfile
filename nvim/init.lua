@@ -199,6 +199,15 @@ do
 	require("Comment").setup({
 		pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
 	})
+
+	-- [[ Git conflict ]]
+	vim.pack.add({ gh("akinsho/git-conflict.nvim") })
+	require("git-conflict").setup({
+		default_mapping = {
+			next = "]x",
+			prev = "[x",
+		},
+	})
 end
 
 -- Colorscheme
