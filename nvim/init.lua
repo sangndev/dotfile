@@ -644,3 +644,100 @@ do
 		signature = { enabled = true, window = { border = "rounded", show_documentation = false } },
 	})
 end
+
+-- Status line
+
+do
+	function _G.short_filepath()
+		local path = vim.fn.expand("%:~:.")
+		local parts = vim.split(path, "/")
+		if #parts <= 3 then
+			return path
+		end
+
+		local last_parts = { unpack(parts, #parts - 2, #parts) }
+		return "~../" .. table.concat(last_parts, "/")
+	end
+
+	function _G.mode()
+		local mode_map = {
+			n = "NORMAL ",
+			i = "INSERT ",
+			v = "VISUAL ",
+			V = "V-LINE ",
+			[""] = "V-BLOCK ",
+			c = "COMMAND ",
+			s = "SELECT ",
+			S = "S-LINE ",
+			[""] = "S-BLOCK ",
+			R = "REPLACE ",
+			t = "TERMINAL ",
+		}
+		local mode = vim.fn.mode()
+		return mode_map[mode] or mode
+	end
+
+	function _G.get_lsp_diagnostics()
+		local clients = vim.lsp.get_clients({ bufnr = 0 })
+		if #clients == 0 then
+			return ""
+		end
+
+		local diagnostics = vim.diagnostic.get(0)
+		local errors = 0
+		local warnings = 0
+
+		for _, diagnostic in ipairs(diagnostics) do
+			if diagnostic.severity == vim.diagnostic.severity.ERROR then
+				errors = errors + 1
+			elseif diagnostic.severity == vim.diagnostic.severity.WARN then
+				warnings = warnings + 1
+			end
+		end
+
+		if errors == 0 and warnings == 0 then
+			return ""
+		end
+
+		local parts = {}
+		if errors > 0 then
+			table.insert(parts, string.format("%%#DiagnosticError#E:%d%%#StatusLine#", errors))
+		end
+		if warnings > 0 then
+			if errors > 0 then
+				table.insert(parts, " ")
+			end
+			table.insert(parts, string.format("%%#DiagnosticWarn#W:%d%%#StatusLine#", warnings))
+		end
+
+		return table.concat(parts)
+	end
+
+	function _G.recording_status()
+		local reg = vim.fn.reg_recording()
+		if reg == "" then
+			return ""
+		else
+			return "[Recording @" .. reg .. "]"
+		end
+	end
+
+	vim.o.statusline = table.concat({
+		"%#PmenuSel#",
+		" ",
+		"%{%v:lua.mode()%}",
+		"%#StatusLine#",
+		"%{%v:lua.recording_status()%}",
+		" ",
+		"%{%v:lua.short_filepath()%}",
+		"%m",
+		" ",
+		"%=",
+		"%{%v:lua.get_lsp_diagnostics()%}",
+		" ",
+		"%{&filetype}",
+		" ",
+		"[%p%%]",
+		" ",
+	})
+end
