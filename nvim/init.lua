@@ -223,6 +223,11 @@ do
 	vim.pack.add({ gh("rachartier/tiny-cmdline.nvim") })
 	require("tiny-cmdline").setup({
 		native_types = {},
+		title = {
+			enabled = true,
+			pos = "center", -- "left" | "center" | "right"
+		},
+		on_reposition = require("tiny-cmdline").adapters.blink,
 	})
 
 	-- [[ Comment ]]
@@ -484,8 +489,12 @@ do
 			end
 			map("gd", vim.lsp.buf.definition, "[G]o to [D]efinition")
 			map("<leader>q", vim.diagnostic.setloclist, "[L]ist [D]iagnostics")
-			map("]d", vim.diagnostic.goto_next, "Goto next [D]iagnostics")
-			map("[d", vim.diagnostic.goto_prev, "Goto prev [D]iagnostics")
+			map("]d", function()
+				vim.diagnostic.jump({ count = 1, float = true })
+			end, "Goto next [D]iagnostics")
+			map("[d", function()
+				vim.diagnostic.jump({ count = -1, float = true })
+			end, "Goto prev [D]iagnostics")
 			map("<leader>d", vim.diagnostic.open_float, "Open diagnostic in float window")
 		end,
 	})
