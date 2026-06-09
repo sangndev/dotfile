@@ -670,17 +670,17 @@ do
 
 	function _G.mode()
 		local mode_map = {
-			n = "NORMAL ",
-			i = "INSERT ",
-			v = "VISUAL ",
-			V = "V-LINE ",
-			[""] = "V-BLOCK ",
-			c = "COMMAND ",
-			s = "SELECT ",
-			S = "S-LINE ",
-			[""] = "S-BLOCK ",
-			R = "REPLACE ",
-			t = "TERMINAL ",
+			n = "%#NormalMode# N ",
+			i = "%#InsertMode# I ",
+			v = "%#VisualMode# V ",
+			V = "%#VisualMode# VL ",
+			[""] = "%#VisualMode# VB ",
+			c = "%#CommandMode# C ",
+			s = "%#PmenuSel# S ",
+			S = "%#PmenuSel# SL ",
+			[""] = "%#PmenuSel# SB ",
+			R = "%#PmenuSel# R ",
+			t = "%#PmenuSel# T ",
 		}
 		local mode = vim.fn.mode()
 		return mode_map[mode] or mode
@@ -732,8 +732,6 @@ do
 	end
 
 	vim.o.statusline = table.concat({
-		"%#PmenuSel#",
-		" ",
 		"%{%v:lua.mode()%}",
 		"%#StatusLine#",
 		"%{%v:lua.recording_status()%}",
