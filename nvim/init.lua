@@ -44,6 +44,7 @@ do
 	vim.o.wrap = false
 	vim.o.cmdheight = 0
 	vim.o.laststatus = 3
+	vim.o.path = "**"
 
 	vim.keymap.set("x", "p", [["_dP]], { desc = "Paste over selection without losing yanked text" })
 	vim.keymap.set("n", "<leader>h", "<cmd>noh<cr>", { desc = "Set no hilighting", silent = true })
