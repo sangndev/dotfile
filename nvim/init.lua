@@ -458,6 +458,7 @@ do
 		ts_ls = {},
 		eslint = {},
 		tailwindcss = {},
+		svelte = {},
 
 		stylua = {}, -- Used to format Lua code
 
