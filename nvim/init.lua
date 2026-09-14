@@ -175,6 +175,16 @@ do
 	-- [[ UI2 ]]
 	require("vim._core.ui2").enable({})
 
+	-- [[ Tiny cmdline ]]
+	vim.pack.add({ gh("rachartier/tiny-cmdline.nvim") })
+	require("tiny-cmdline").setup({
+		title = {
+			enabled = true,
+			pos = "left",
+		},
+		native_types = {}
+	})
+
 	-- [[ Comment ]]
 	vim.pack.add({ gh("numToStr/Comment.nvim"), gh("JoosepAlviste/nvim-ts-context-commentstring") })
 	require("Comment").setup({
