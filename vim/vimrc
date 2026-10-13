@@ -1,44 +1,99 @@
-" [[ Global configs ]]
-syntax on
-filetype on
-
+" -------------------------------------------------------------------
+" Setting
+" -------------------------------------------------------------------
 let mapleader = " "
 let maplocalleader = " "
 let g:netrw_banner = 0
 
-set termguicolors
+filetype plugin indent on
+syntax on
 set number
 set relativenumber
-set tabstop=2
-set softtabstop=2
-set shiftwidth=2
-set smarttab
-set expandtab
-set smartindent
+set si
 set noswapfile
-set nobackup
-set ruler
+set tabstop=2
+set shiftwidth=2
+set expandtab
+set smarttab
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
+set showmatch
+set noerrorbells
+set novisualbell
+set encoding=utf8
+set clipboard=unnamed
+set noendofline
+set shiftround
+set nowrap
+set colorcolumn=80
+set cursorline
+set laststatus=2
+set splitbelow
+set splitright
 set pumheight=10
 set signcolumn=yes
-set noshowmode
 set updatetime=300
 set timeoutlen=500
 set scrolloff=10
-set splitbelow
-set splitright
-set ignorecase
-set smartcase
-set cursorline
-set clipboard="unnamedplus"
-set breakindent
-set laststatus=2
-set colorcolumn="80"
 set confirm
 set nolist
-set hlsearch
-set nowrap
+set ruler
 
-" [[ Keymappings ]]
+" -------------------------------------------------------------------
+" Plugins
+" -------------------------------------------------------------------
+let s:plug_dir = expand("~/.vim/plugins")
+
+function! GetRepoName(name)
+  let l:split_name = split(a:name, "/")
+  let l:name = l:split_name[-1]
+  if l:name == "vim" || l:name == "nvim"
+    let l:name = l:split_name[-2]
+  endif
+  return l:name
+endfunction
+
+function! GetPluginDirs()
+  let l:dirs = glob(s:plug_dir . "/*", 0, 1)
+  return filter(l:dirs, 'isdirectory(v:val)')
+endfunction
+
+function! s:plug_install(repo)
+   let l:name = GetRepoName(a:repo)
+   let l:path = s:plug_dir . "/" . l:name
+   
+   if !isdirectory(l:path)
+    if !isdirectory(s:plug_dir)
+      call mkdir(s:plug_dir, 'p')
+    endif
+    execute '!git clone --depth=1 ' . a:repo . ' ' . shellescape(l:path)
+   endif
+
+   execute 'set runtimepath+=' . fnameescape(l:path)
+endfunction
+
+function! s:plug_update()
+  let l:plug_dirs = GetPluginDirs()
+  for dir in l:plug_dirs
+    if isdirectory(dir . "/.git")
+      echo "Updating " . dir
+      call system('git -C ' . shellescape(dir) . ' pull --ff-only')
+    endif
+  endfor
+  echomsg 'Done.'
+endfunction
+
+command! PlugUpdate call s:plug_update()
+
+" PLUGIN INSTALLATION HERE
+call s:plug_install("https://github.com/catppuccin/vim")
+call s:plug_install("https://github.com/ctrlpvim/ctrlp.vim")
+
+" -------------------------------------------------------------------
+" Mapping
+" -------------------------------------------------------------------
 nnoremap <silent> <leader>e :Ex<cr>
 nnoremap <silent> <C-u> <C-u>zz
 nnoremap <silent> n nzzzv
@@ -58,83 +113,8 @@ tnoremap <esc><esc> <C-\><C-N>
 nnoremap <silent> sv <C-w>v<C-w>p
 nnoremap <silent> ss <C-w>s<C-w>p
 
-" [[ Plugins ]]
-let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
-if empty(glob(data_dir . '/autoload/plug.vim'))
-	silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
+" -------------------------------------------------------------------
+" Finder & Grep
+" -------------------------------------------------------------------
+nnoremap <silent><leader>pf :CtrlP<cr>
 
-call plug#begin()
-" Detect tabstop and shiftwidth automatically
-Plug 'tpope/vim-sleuth'
-" Colorscheme
-Plug 'ghifarit53/tokyonight-vim'
-" Fuzzy Search
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-" Git
-Plug 'airblade/vim-gitgutter'
-Plug 'tpope/vim-fugitive'
-" Comment
-Plug 'tpope/vim-commentary'
-" Lsp "
-Plug 'neoclide/coc.nvim', { 'branch': 'release'}
-" Auto pair
-Plug 'LunarWatcher/auto-pairs'
-" Synrax highlighting
-Plug 'sheerun/vim-polyglot'
-call plug#end()
-
-" [[ Configure plugins ]]
-
-" Colorscheme
-let g:tokyonight_style = 'night'
-let g:tokyonight_enable_italic = 0
-colorscheme tokyonight
-
-" fzf-vim
-nnoremap <leader>pf :Files<cr>
-nnoremap <leader>pb :Buffers<cr>
-nnoremap <leader>ps :Rg 
-
-" LSP config
-inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-inoremap <silent><expr> <c-o> coc#refresh()
-
-" Use `[g` and `]g` to navigate diagnostics
-nmap <silent><nowait> [d <Plug>(coc-diagnostic-prev)
-nmap <silent><nowait> ]d <Plug>(coc-diagnostic-next)
-" GoTo code navigation
-nmap <silent><nowait> gd <Plug>(coc-definition)
-nmap <silent><nowait> gy <Plug>(coc-type-definition)
-nmap <silent><nowait> gi <Plug>(coc-implementation)
-nmap <silent><nowait> gr <Plug>(coc-references)
-" Use K to show documentation in preview window
-nnoremap <silent> K :call ShowDocumentation()<CR>
-function! ShowDocumentation()
-  if CocAction('hasProvider', 'hover')
-    call CocActionAsync('doHover')
-  else
-    call feedkeys('K', 'in')
-  endif
-endfunction
-" Highlight the symbol and its references when holding the cursor
-autocmd CursorHold * silent call CocActionAsync('highlight')
-" Symbol renaming
-nmap grn <Plug>(coc-rename)
-" Formatting selected code
-xmap <leader>f  <Plug>(coc-format-selected)
-nnoremap <silent> <leader>f  :Format<CR>
-augroup mygroup
-  autocmd!
-  " Setup formatexpr specified filetype(s)
-  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-augroup end
-" Applying code actions to the selected code block
-" Example: `<leader>aap` for current paragraph
-xmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
-" Add `:Format` command to format current buffer
-command! -nargs=0 Format :call CocActionAsync('format')
