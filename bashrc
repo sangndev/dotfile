@@ -40,7 +40,6 @@ export NVM_DIR="$HOME/.nvm"
 alias lsa='ls -A'
 alias l='ls -l'
 alias ll='ls -la'
-alias lynx='lynx -display_charset=UTF-8 -vikeys'
 tm() {
   read -rp "Session name: " name
   [ -z "$name" ] && echo "No name given." && return 1
@@ -52,4 +51,3 @@ tm() {
     tmux switch-client -t "$name"
   fi
 }
-export GOOSE_DISABLE_KEYRING=1
