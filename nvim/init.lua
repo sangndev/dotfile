@@ -324,6 +324,12 @@ end, { desc = "[F]ormat buffer" })
 -- ------------------------------------------------------------
 -- Search & Grep
 -- ------------------------------------------------------------
+
+-- Native `find` command
+vim.opt.path:append "**"
+vim.opt.wildignore:append({ "*/node_modules/*", "*.o", "*.obj", "*.pyc", "*.class", "*.jar "})
+
+-- Telescope
 local actions = require("telescope.actions")
 require("telescope").setup({
   defaults = {
