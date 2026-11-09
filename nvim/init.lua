@@ -327,7 +327,7 @@ end, { desc = "[F]ormat buffer" })
 
 -- Native `find` command
 vim.opt.path:append "**"
-vim.opt.wildignore:append({ "*/node_modules/*", "*.o", "*.obj", "*.pyc", "*.class", "*.jar "})
+vim.opt.wildignore:append({ "*/node_modules/*", "*.o", "*.obj", "*.pyc", "*.class", "*.jar ", "*/.next/*", "*/.git/*" })
 
 -- Telescope
 local actions = require("telescope.actions")
